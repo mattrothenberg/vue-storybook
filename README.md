@@ -8,11 +8,13 @@ yarn add vue-storybook
 ```
 
 ```js
-const { storyLoader, generateStories } = require('vue-storybook')
+const { storyLoader, storyGenerator } = require('vue-storybook')
 ```
 
 ## What is this?
 A **Webpack loader** + **helper script** that allows you to embellish your pre-existing Vue single file components (SFC) with a custom `<story>` block that's automatically translated into a [Storybook](https://github.com/storybooks/storybook)-flavored story.
+
+### Hello World Example
 
 ```vue
 <story name="Disabled Button">
@@ -39,24 +41,45 @@ module.exports = (storybookBaseConfig, configType) => {
 };
 ```
 
-Then, in your main `index.stories.js` (or wherever your write your stories), import our helper script and run it!
+Add a custom `<story>` block to your single file component
+
+```vue
+  <story
+    name="Dynamic Button"
+    methods="{handleClick: action('click')}"
+    notes="This is cool"
+    knobs="{buttonText: text('Button text', 'initial value')}">
+      <my-button @click="handleClick">
+        {{ buttonText }}
+      </my-button>
+  </story>
+```
+
+Then, in your main `index.stories.js` (or wherever your write your stories), leverage our helper script to start adding stories
 ```js
-import { generateStories } from 'vue-storybook'
+// Import all 'yr addons!
+import { action } from '@storybook/addon-actions';
+import { withNotes } from '@storybook/addon-notes';
+import { withKnobs, text, color, select } from '@storybook/addon-knobs/vue';
+
+// Import our helper
+import { storyGenerator } from 'vue-storybook'
+
+// Import your component
 import MyButton from './MyButton.vue';
 
 // Save our "stories" object so we can pass it to our helper script
 const MyButtonStories = storiesOf('Button', module)
 
-// Run our helper script by passing ^^, as well as the component that you wish to document
-generateStories(MyButtonStories, MyButton)
+// New up a single instance of `storyGenerator`, which takes an Object of plugins
+const generator = new storyGenerator({action, withNotes, text})
+generator.generateStories(MyButtonStories, MyButton)
 ```
 
 ## Roadmap
-As it stands, the `<story>` block only supports simple, named stories. I'd love help in adding support for the following features:
-
-- [ ] Actions
-- [ ] Knobs
+- [x] Actions
+- [x] Knobs
 - [ ] Links
-- [ ] Notes
+- [x] Notes
 - [ ] Multi-component support?
 

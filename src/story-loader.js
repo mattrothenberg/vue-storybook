@@ -1,4 +1,5 @@
 const loaderUtils = require('loader-utils')
+const serialize = require('serialize-javascript')
 
 module.exports = function (source) {
   const story = generateCode(source, this)
@@ -9,12 +10,15 @@ function generateCode (source, ctx) {
   let code = ''
   const story = {
     template: source.trim(),
-    name: loaderUtils.getOptions(ctx).name || ''
+    name: loaderUtils.getOptions(ctx).name || '',
+    methods: loaderUtils.getOptions(ctx).methods,
+    notes: loaderUtils.getOptions(ctx).notes,
+    knobs: loaderUtils.getOptions(ctx).knobs
   } 
 
   code += `function (Component) {
     Component.options.__stories = Component.options.__stories || []
-    Component.options.__stories.push(${JSON.stringify(story)})
+    Component.options.__stories.push(${serialize(story)})
   }\n`
   return code
 }

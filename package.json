@@ -6,7 +6,8 @@
   "author": "Matt Rothenberg",
   "license": "ISC",
   "dependencies": {
-    "loader-utils": "^1.1.0"
+    "loader-utils": "^1.1.0",
+    "serialize-javascript": "^1.4.0"
   },
   "devDependencies": {
     "babel-loader": "^7.1.3"
