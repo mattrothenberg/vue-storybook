@@ -1,6 +1,6 @@
 {
   "name": "vue-storybook",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Custom <story> block for your Single File Components (SFC)",
   "main": "index.js",
   "author": "Matt Rothenberg",
