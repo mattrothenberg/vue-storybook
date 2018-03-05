@@ -12,7 +12,8 @@ function generateCode (source, ctx) {
     template: source.trim(),
     name: loaderUtils.getOptions(ctx).name || '',
     methods: loaderUtils.getOptions(ctx).methods,
-    notes: loaderUtils.getOptions(ctx).notes
+    notes: loaderUtils.getOptions(ctx).notes,
+    knobs: loaderUtils.getOptions(ctx).knobs
   } 
 
   code += `function (Component) {
