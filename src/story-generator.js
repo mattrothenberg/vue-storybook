@@ -1,5 +1,16 @@
 function storyGenerator (plugins) {
-  const { action, withNotes, text } = plugins
+  const {
+    action,
+    withNotes,
+    text,
+    boolean,
+    number,
+    color,
+    object,
+    array,
+    select,
+    date
+  } = plugins
 
   this.generateStories = function(group, vueComponent) {
     if (!vueComponent.__stories) return
