@@ -1,7 +1,7 @@
 const storyLoader = require.resolve('./src/story-loader.js')
-const generateStories = require('./src/generate-stories.js')
+const storyGenerator = require('./src/story-generator.js')
 
 module.exports = {
-  generateStories,
+  storyGenerator,
   storyLoader
 }

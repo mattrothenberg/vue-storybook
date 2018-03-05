@@ -11,7 +11,8 @@ function generateCode (source, ctx) {
   const story = {
     template: source.trim(),
     name: loaderUtils.getOptions(ctx).name || '',
-    methods: loaderUtils.getOptions(ctx).methods
+    methods: loaderUtils.getOptions(ctx).methods,
+    notes: loaderUtils.getOptions(ctx).notes
   } 
 
   code += `function (Component) {
