@@ -41,6 +41,20 @@ module.exports = (storybookBaseConfig, configType) => {
 };
 ```
 
+Add a custom `<story>` block to your single file component
+
+```vue
+  <story
+    name="Dynamic Button"
+    methods="{handleClick: action('click')}"
+    notes="This is cool"
+    knobs="{buttonText: text('Button text', 'initial value')}">
+      <my-button @click="handleClick">
+        {{ buttonText }}
+      </my-button>
+  </story>
+```
+
 Then, in your main `index.stories.js` (or wherever your write your stories), leverage our helper script to start adding stories
 ```js
 // Import all 'yr addons!
