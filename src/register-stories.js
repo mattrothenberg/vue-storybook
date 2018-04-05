@@ -2,7 +2,7 @@ const Vue = require('vue').default
 const upperFirst = require('lodash').upperFirst
 const camelCase = require('lodash').camelCase
 
-function registerStories (req, fileName, sb, plugins) {
+function registerStories (req, fileName, sbInstance, plugins) {
   const {
     action,
     withNotes,
@@ -13,7 +13,8 @@ function registerStories (req, fileName, sb, plugins) {
     object,
     array,
     select,
-    date
+    date,
+    withKnobs
   } = plugins
   const componentConfig = req(fileName)
   const componentName = upperFirst(
@@ -27,7 +28,7 @@ function registerStories (req, fileName, sb, plugins) {
   const stories = componentConfig.__stories || componentConfig.default.__stories
   if (!stories) return
   stories.forEach(story => {
-    console.log(story)
+    let storiesOf = sbInstance(story.name, module)
     let addFunc
     let baseFunc = () => {
       let data = story.knobs ? eval(`(${story.knobs})`) : {}
@@ -41,10 +42,13 @@ function registerStories (req, fileName, sb, plugins) {
     }
 
     story.notes
-    ? addFunc = withNotes(story.notes)(baseFunc)
-    : addFunc = baseFunc
+      ? addFunc = withNotes(story.notes)(baseFunc) : addFunc = baseFunc
 
-    sb(story.name, module).add(story.name, addFunc)
+    story.knobs
+      ? storiesOf.addDecorator(withKnobs) : false
+
+    storiesOf.add(story.name, addFunc)
+
     Vue.component(componentName, componentConfig.default || componentConfig)
   })
 }
