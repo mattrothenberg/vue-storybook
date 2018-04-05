@@ -1,17 +1,6 @@
-const Vue = require('vue')
-
-const capitalize = ([first, ...rest], lowerRest = false) =>
-  first.toUpperCase() + (lowerRest ? rest.join('').toLowerCase() : rest.join(''));
-
-const camelCase = str => {
-  let s =
-    str &&
-    str
-      .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
-      .map(x => x.slice(0, 1).toUpperCase() + x.slice(1).toLowerCase())
-      .join('');
-  return s.slice(0, 1).toLowerCase() + s.slice(1);
-};
+const Vue = require('vue').default
+const upperFirst = require('lodash').upperFirst
+const camelCase = require('lodash').camelCase
 
 function registerStories (req, fileName, sb, plugins) {
   const {
@@ -27,10 +16,10 @@ function registerStories (req, fileName, sb, plugins) {
     date
   } = plugins
   const componentConfig = req(fileName)
-  const componentName = capitalize(
+  const componentName = upperFirst(
     camelCase(
       fileName
-        .replace(/^\.\/_/, '')
+        .replace(/^\.\/[\W_]*?/, '')
         .replace(/\.\w+$/, '')
     )
   )
@@ -56,7 +45,7 @@ function registerStories (req, fileName, sb, plugins) {
     : addFunc = baseFunc
 
     sb(story.name, module).add(story.name, addFunc)
-    Vue.default.component(componentName, componentConfig.default || componentConfig)
+    Vue.component(componentName, componentConfig.default || componentConfig)
   })
 }
 
