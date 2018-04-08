@@ -15,6 +15,7 @@ const { storyLoader, registerStories } = require('vue-storybook')
 A **Webpack loader** + **helper script** that allows you to embellish your pre-existing Vue single file components (SFC) with a custom `<story>` block that's automatically translated into a [Storybook](https://github.com/storybooks/storybook)-flavored story.
 
 ### Hello World Example
+Repo: https://github.com/mattrothenberg/vue-storybook-example
 
 ```vue
 <story name="Disabled Button">
