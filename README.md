@@ -8,7 +8,7 @@ yarn add vue-storybook
 ```
 
 ```js
-const { storyLoader, storyGenerator } = require('vue-storybook')
+const { storyLoader, registerStories } = require('vue-storybook')
 ```
 
 ## What is this?
@@ -41,7 +41,10 @@ module.exports = (storybookBaseConfig, configType) => {
 };
 ```
 
-Add a custom `<story>` block to your single file component
+Add a custom `<story>` block to your single file component. The following Storybook plugins are supported:
+- Actions
+- Notes
+- Knobs
 
 ```vue
   <story
@@ -57,29 +60,32 @@ Add a custom `<story>` block to your single file component
 
 Then, in your main `index.stories.js` (or wherever your write your stories), leverage our helper script to start adding stories
 ```js
-// Import all 'yr addons!
+// Import Storybook + all 'yr plugins!
+import { storiesOf } from '@storybook/vue';
 import { action } from '@storybook/addon-actions';
 import { withNotes } from '@storybook/addon-notes';
 import { withKnobs, text, color, select } from '@storybook/addon-knobs/vue';
 
 // Import our helper
-import { storyGenerator } from 'vue-storybook'
+import { registerStories } from 'vue-storybook'
 
-// Import your component
-import MyButton from './MyButton.vue';
+// Require the Vue SFC with <story> blocks inside
+const req = require.context('./', true, /\.vue$/)
 
-// Save our "stories" object so we can pass it to our helper script
-const MyButtonStories = storiesOf('Button', module)
+// Programatically register these stories
+function loadStories() {
+  req.keys().forEach((filename) => {
+    // The last argument here is an object containing ALL of the plugins you've used in your SFC.
+    registerStories(req, filename, storiesOf, {withKnobs, withNotes, action, text})
+  })
+}
 
-// New up a single instance of `storyGenerator`, which takes an Object of plugins
-const generator = new storyGenerator({action, withNotes, text})
-generator.generateStories(MyButtonStories, MyButton)
+// Let's go!
+loadStories()
 ```
 
 ## Roadmap
 - [x] Actions
 - [x] Knobs
-- [ ] Links
 - [x] Notes
-- [ ] Multi-component support?
 
