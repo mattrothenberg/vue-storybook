@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.4.0
+
+- Expose `group` attribute for grouping related stories.
+
+```html
+<story
+  group="Buttons"
+  name="Primary Button">
+  ...
+</story>
+```
+
 ## 0.3.0
 
 - Breaking API change around story registration.
