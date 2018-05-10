@@ -1,24 +1,25 @@
-const loaderUtils = require('loader-utils')
-const serialize = require('serialize-javascript')
+const loaderUtils = require("loader-utils");
+const serialize = require("serialize-javascript");
 
-module.exports = function (source) {
-  const story = generateCode(source, this)
-  this.callback(null, `module.exports = ${story}`)
-}
+module.exports = function(source) {
+  const story = generateCode(source, this);
+  this.callback(null, `module.exports = ${story}`);
+};
 
-function generateCode (source, ctx) {
-  let code = ''
+function generateCode(source, ctx) {
+  let code = "";
   const story = {
     template: source.trim(),
-    name: loaderUtils.getOptions(ctx).name || '',
+    name: loaderUtils.getOptions(ctx).name || "",
+    group: loaderUtils.getOptions(ctx).group || "Stories",
     methods: loaderUtils.getOptions(ctx).methods,
     notes: loaderUtils.getOptions(ctx).notes,
     knobs: loaderUtils.getOptions(ctx).knobs
-  } 
+  };
 
   code += `function (Component) {
     Component.options.__stories = Component.options.__stories || []
     Component.options.__stories.push(${serialize(story)})
-  }\n`
-  return code
+  }\n`;
+  return code;
 }
