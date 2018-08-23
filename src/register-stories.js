@@ -17,7 +17,7 @@ function registerStories(req, fileName, sbInstance, plugins) {
     withKnobs
   } = plugins;
   const componentConfig = req(fileName);
-  const componentName = upperFirst(
+  const componentName = componentConfig.default.name || upperFirst(
     camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
   );
 
