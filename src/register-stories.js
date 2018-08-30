@@ -2,7 +2,7 @@ const Vue = require("vue").default;
 const upperFirst = require("lodash").upperFirst;
 const camelCase = require("lodash").camelCase;
 
-function registerStories(req, fileName, sbInstance, plugins) {
+function registerStories(req, fileName, sbInstance, plugins, extensions) {
   const {
     action,
     withNotes,
@@ -30,6 +30,7 @@ function registerStories(req, fileName, sbInstance, plugins) {
     let baseFunc = () => {
       let data = story.knobs ? eval(`(${story.knobs})`) : {};
       return {
+        ...extensions,
         data() {
           return data;
         },
