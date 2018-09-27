@@ -21,8 +21,9 @@ function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
     camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
   );
 
-  const stories =
-    componentConfig.__stories || componentConfig.default.__stories;
+  const componentDefault = componentConfig.default || componentConfig;
+  const stories = componentDefault.__stories;
+
   if (!stories) return;
   stories.forEach(story => {
     let storiesOf = sbInstance(story.group, module);
@@ -46,7 +47,7 @@ function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
 
     storiesOf.add(story.name, addFunc);
 
-    Vue.component(componentName, componentConfig.default || componentConfig);
+    Vue.component(componentName, componentDefault);
   });
 }
 
