@@ -8,7 +8,7 @@ module.exports = function(source) {
 
 function generateCode(source, ctx) {
   let code = "";
-  const options = loaderUtils.parseQuery(ctx.resourceQuery || "");
+  const options = loaderUtils.getOptions(ctx) || {};
   const story = {
     template: source.trim(),
     name: options.name || "",
