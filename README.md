@@ -9,7 +9,11 @@ yarn add vue-storybook
 ```
 
 ```js
-const { storyLoader, registerStories } = require("vue-storybook");
+const {
+  registerStories, // Helper script
+  utility,         // Util for adding loader to webpack
+  storyLoader,     // Provide path String to the story loader
+} = require("vue-storybook");
 ```
 
 ## What is this?
@@ -32,19 +36,30 @@ turns into:
 
 ## How does it work?
 
-Given an existing Vue storybook project, add or modify Storybook's `webpack.config.js` by importing and adding our loader.
+Pass an existing Storybook's `webpack.config.js` into our `utility.configureWebpack` function.
 
 ```js
-const { storyLoader } = require("vue-storybook"); // Import!
+const { utility } = require('vue-storybook')
+
+// Export a function. Accept the base config as the only param.
 module.exports = (storybookBaseConfig, configType) => {
-  storybookBaseConfig.module.rules.push(
-    {
-        resourceQuery: /blockType=story/,
-        loader: storyLoader
-      }
-  );
-  return storybookBaseConfig;
+  const configuredConfig = utility.configureWebpack(storybookBaseConfig)
+  return configuredConfig
 };
+```
+
+`utility.configureWebpack` is a utility function that inject additional options into the existing `vue-loader` in order to support the `story` custom block in Vue's Single File Component.
+
+```js
+test: /\.vue$/,
+use: [{
+  loader: 'vue-loader',
+  options: {              // <-- Injected option
+    loaders: {            // <-- ...
+      story: storyLoader  // <-- ...
+    }                     // <-- ...
+  }                       // <-- ...
+}]
 ```
 
 Add a custom `<story>` block to your single file component. The following Storybook plugins are supported:
