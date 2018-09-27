@@ -105,7 +105,7 @@ test('should inject by expanding loader into loaders syntax', () => {
   const outputConfig = makeConfigWithRules([
     {
       test: /\.vue$/,
-      loaders: [makeStandardConfiguredOutput()]
+      use: [makeStandardConfiguredOutput()]
     },
   ]);
 
@@ -212,7 +212,7 @@ test('should work when there are multiple rules', () => {
       exclude: [Array]
     },
     { test: /\.vue$/,
-      loaders: [makeStandardConfiguredOutput()],
+      use: [makeStandardConfiguredOutput()],
     },
     { test: /\.md$/,
       use: [Array]

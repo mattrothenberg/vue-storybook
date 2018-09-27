@@ -17,9 +17,9 @@ const getVueTargettedRules = (moduleRules) => {
  * @param {Object} rule
  * @returns {string} rule use reference. Fallback to 'loaders' if unspecified.
  */
-const getRuleUseReference = rule => rule.use
-  ? 'use' // Webpack 4
-  : 'loaders' // Webpack 3
+const getRuleUseReference = rule => rule.loaders
+  ? 'loaders' // Webpack 2
+  : 'use' // Webpack 3
 ;
 
 /**
