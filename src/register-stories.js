@@ -29,14 +29,13 @@ function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
     let addFunc;
     let baseFunc = () => {
       let data = story.knobs ? eval(`(${story.knobs})`) : {};
-      return {
-        ...extensions,
+      return Object.assign(extensions, {
         data() {
           return data;
         },
         template: story.template,
         methods: eval(`(${story.methods})`)
-      };
+      });
     };
 
     story.notes
