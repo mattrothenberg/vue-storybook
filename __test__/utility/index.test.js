@@ -6,7 +6,7 @@ const VUE_LOADER_PATH = 'path/node_modules/vue-loader/index.js';
 const VUE_LOADER_TESTER = /\.vue$/;
 const makeStandardConfiguredOutput = () => ({
   loader: VUE_LOADER_PATH,
-  options: { story: storyLoader },
+  options: { loaders: { story: storyLoader }},
 });
 
 test('should inject storybook option into existing vue-loader', () => {
@@ -86,8 +86,8 @@ test('should inject storybook option into more than one vue-loader', () => {
     },
     { test: /\.vue$/,
       loaders: [
-        { loader: VUE_LOADER_PATH, options: { story: storyLoader } },
-        { loader: VUE_LOADER_PATH, options: { story: storyLoader } },
+        { loader: VUE_LOADER_PATH, options: { loaders: { story: storyLoader }}},
+        { loader: VUE_LOADER_PATH, options: { loaders: { story: storyLoader }}},
       ],
     },
   ]);
@@ -177,7 +177,9 @@ test('should inject without losing other loader properties', () => {
             itemA: 1,
             itemB: 2,
           },
-          story: storyLoader,
+          loaders: {
+            story: storyLoader,
+          },
         },
       }]
     },
