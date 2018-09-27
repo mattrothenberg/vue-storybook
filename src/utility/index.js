@@ -84,8 +84,6 @@ module.exports = {
     vueTargettedRules.forEach(normalizeLoaderSyntax);
     vueTargettedRules.forEach(injectVueStorybookOption);
 
-    console.log(webpackConfig.module.rules);
-
     return webpackConfig;
   },
 };
