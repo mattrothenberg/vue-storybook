@@ -2,7 +2,7 @@ const Vue = require("vue").default;
 const upperFirst = require("lodash").upperFirst;
 const camelCase = require("lodash").camelCase;
 
-function registerStories(req, fileName, sbInstance, plugins, extensions) {
+function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
   const {
     action,
     withNotes,
