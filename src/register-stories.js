@@ -17,11 +17,8 @@ function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
     withKnobs
   } = plugins;
   const componentConfig = req(fileName);
-  const componentName = componentConfig.default.name || upperFirst(
-    camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
-  );
-
   const componentDefault = componentConfig.default || componentConfig;
+
   const stories = componentDefault.__stories;
 
   if (!stories) return;
@@ -47,6 +44,9 @@ function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
 
     storiesOf.add(story.name, addFunc);
 
+    const componentName = componentDefault.name || upperFirst(
+      camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
+    );
     Vue.component(componentName, componentDefault);
   });
 }
