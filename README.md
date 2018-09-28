@@ -36,6 +36,24 @@ turns into:
 
 ## How does it work?
 
+Given an existing Vue storybook project, add or modify Storybook's webpack.config.js by importing and adding our loader. This configuration work for Storybook v4 and `vue-loader` v15.
+
+```js
+const { storyLoader } = require("vue-storybook"); // Import!
+module.exports = (storybookBaseConfig, configType) => {
+  storybookBaseConfig.module.rules.push(
+    {
+      resourceQuery: /blockType=story/,
+      loader: storyLoader
+    }
+  );
+  return storybookBaseConfig;
+};
+```
+
+<details>
+  <summary><strong>See Integration with Storybook v3 & vue-loader ≤ v14</strong></summary>
+
 Pass an existing Storybook's `webpack.config.js` into our `utility.configureWebpack` function.
 
 ```js
@@ -61,6 +79,10 @@ use: [{
   }                       // <-- ...
 }]
 ```
+
+</details>
+
+---
 
 Add a custom `<story>` block to your single file component. The following Storybook plugins are supported:
 
