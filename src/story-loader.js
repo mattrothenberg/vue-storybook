@@ -9,10 +9,10 @@ module.exports = function(source) {
 function generateCode(source, ctx) {
   let code = "";
 
-  const options = {
-    ...(loaderUtils.getOptions(ctx) || {}), // vue-loader <= v14
-    ...loaderUtils.parseQuery(ctx.resourceQuery || "?"), // vue-loader >= v15
-  };
+  const options = Object.assign(
+    (loaderUtils.getOptions(ctx) || {}), // vue-loader <= v14
+    loaderUtils.parseQuery(ctx.resourceQuery || "?"), // vue-loader >= v15
+  );
   const story = {
     template: source.trim(),
     name: options.name || "",
