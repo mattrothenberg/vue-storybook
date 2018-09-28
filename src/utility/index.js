@@ -77,6 +77,16 @@ const injectVueStorybookOption = (rule) => {
 };
 
 module.exports = {
+  /**
+   * This function inject additional options into the existing
+   * `vue-loader` in order to support the `story` custom block
+   * in Vue's Single File Component.
+   *
+   * Use this function for vue-loader <= v14.
+   * For v15 use resourceQuery instead.
+   * @param {object} webpackConfig
+   * @returns {object} injected webpack config
+   */
   configureWebpack(webpackConfig) {
     const vueTargettedRules = getVueTargettedRules(webpackConfig.module.rules);
 
