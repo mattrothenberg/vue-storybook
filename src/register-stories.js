@@ -2,7 +2,7 @@ const Vue = require("vue").default;
 const upperFirst = require("lodash").upperFirst;
 const camelCase = require("lodash").camelCase;
 
-function registerStories(req, fileName, sbInstance, plugins) {
+function registerStories(req, fileName, sbInstance, plugins, extensions = {}) {
   const {
     action,
     withNotes,
@@ -17,25 +17,23 @@ function registerStories(req, fileName, sbInstance, plugins) {
     withKnobs
   } = plugins;
   const componentConfig = req(fileName);
-  const componentName = upperFirst(
-    camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
-  );
+  const componentDefault = componentConfig.default || componentConfig;
 
-  const stories =
-    componentConfig.__stories || componentConfig.default.__stories;
+  const stories = componentDefault.__stories;
+
   if (!stories) return;
   stories.forEach(story => {
     let storiesOf = sbInstance(story.group, module);
     let addFunc;
     let baseFunc = () => {
       let data = story.knobs ? eval(`(${story.knobs})`) : {};
-      return {
+      return Object.assign({}, extensions, {
         data() {
           return data;
         },
         template: story.template,
         methods: eval(`(${story.methods})`)
-      };
+      });
     };
 
     story.notes
@@ -46,7 +44,10 @@ function registerStories(req, fileName, sbInstance, plugins) {
 
     storiesOf.add(story.name, addFunc);
 
-    Vue.component(componentName, componentConfig.default || componentConfig);
+    const componentName = componentDefault.name || upperFirst(
+      camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
+    );
+    Vue.component(componentName, componentDefault);
   });
 }
 

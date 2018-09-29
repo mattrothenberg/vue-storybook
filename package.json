@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Matt Rothenberg",
   "license": "ISC",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "loader-utils": "^1.1.0",
     "serialize-javascript": "^1.4.0",
@@ -12,6 +15,7 @@
   },
   "devDependencies": {
     "babel-loader": "^7.1.3",
+    "jest": "^23.6.0",
     "lodash": "^4.17.5"
   }
 }

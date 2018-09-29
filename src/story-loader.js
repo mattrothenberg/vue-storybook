@@ -8,13 +8,18 @@ module.exports = function(source) {
 
 function generateCode(source, ctx) {
   let code = "";
+
+  const options = Object.assign(
+    (loaderUtils.getOptions(ctx) || {}), // vue-loader <= v14
+    loaderUtils.parseQuery(ctx.resourceQuery || "?"), // vue-loader >= v15
+  );
   const story = {
     template: source.trim(),
-    name: loaderUtils.getOptions(ctx).name || "",
-    group: loaderUtils.getOptions(ctx).group || "Stories",
-    methods: loaderUtils.getOptions(ctx).methods,
-    notes: loaderUtils.getOptions(ctx).notes,
-    knobs: loaderUtils.getOptions(ctx).knobs
+    name: options.name || "",
+    group: options.group || "Stories",
+    methods: options.methods,
+    notes: options.notes,
+    knobs: options.knobs
   };
 
   code += `function (Component) {
