@@ -5,8 +5,22 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories(req, fileName, sbInstance, plugins) {
-  const { action, withKnobs, text, color, select, boolean } = plugins;
+  const {
+    action,
+    withKnobs,
+    text,
+    boolean,
+    number,
+    select,
+    color,
+    radios,
+    date,
+    files,
+    object,
+    array,
+    optionsKnob,
+    button
+  } = plugins;
   const componentConfig = req(fileName);
   const componentName = getComponentNameFromFilename(fileName);
 
@@ -16,14 +30,21 @@ export default function registerStories(req, fileName, sbInstance, plugins) {
   stories.forEach(story => {
     const storiesOf = sbInstance(story.group || "vue-storybook", module);
     const componentFunc = () => {
-      let data = story.knobs
-        ? parseKnobsObject(story.knobs, {
-            boolean,
+      let data = story.knobs ?
+        parseKnobsObject(story.knobs, {
             text,
+          boolean,
+          number,
             select,
-            color
-          })
-        : {};
+          color,
+          radios,
+          date,
+          files,
+          object,
+          array,
+          optionsKnob,
+          button
+        }) : {};
       return {
         components: {
           [componentName]: componentConfig.default || componentConfig
