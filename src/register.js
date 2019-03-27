@@ -5,7 +5,7 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories(req, fileName, sbInstance, plugins, decorators) {
+export default function registerStories(req, fileName, sbInstance, plugins, decorators, storyOptions) {
   const {
     action,
     withKnobs,
@@ -67,7 +67,8 @@ export default function registerStories(req, fileName, sbInstance, plugins, deco
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
     storiesOf.add(story.name, componentFunc, {
-      notes: story.notes
+      notes: story.notes,
+      ...storyOptions
     });
   });
 }
