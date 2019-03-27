@@ -64,7 +64,6 @@ export default function registerStories(req, fileName, sbInstance, plugins, deco
     })
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
-    story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
     storiesOf.add(story.name, componentFunc, {
       notes: story.notes,
