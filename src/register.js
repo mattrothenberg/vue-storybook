@@ -5,6 +5,7 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
+export default function registerStories(req, fileName, sbInstance, plugins, decorators) {
   const {
     action,
     withKnobs,
@@ -58,6 +59,10 @@ import {
         }
       };
     };
+    decorators.forEach((decor) => {
+      storiesOf.addDecorator(decor);
+    })
+    story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
