@@ -5,7 +5,7 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories(req, fileName, sbInstance, plugins, decorators, storyOptions) {
+export default function registerStories({req, fileName, sbInstance, plugins, decorators, storyOptions}) {
   const {
     action,
     withKnobs,
