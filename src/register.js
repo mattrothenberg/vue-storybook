@@ -59,9 +59,11 @@ export default function registerStories(req, fileName, sbInstance, plugins, deco
         }
       };
     };
+    if(decorators){
     decorators.forEach((decor) => {
       storiesOf.addDecorator(decor);
-    })
+      });
+    }
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
 
