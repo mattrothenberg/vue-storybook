@@ -151,5 +151,5 @@ loadStories();
 - [x] Actions
 - [x] Knobs
 - [x] Notes
-- [] Info
-- [] Readme
+- [ ] Info
+- [ ] Readme
