@@ -66,10 +66,19 @@ export default function registerStories({req, fileName, sbInstance, plugins, dec
     }
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
+    var readmeOptions = storyOptions.readme;
+    var readmeContent = readmeOptions.singleFileComponentBlockEnabled ? componentConfig.default.__docs : componentConfig.default.readme;
+    var readmeConfiguration = {
+      sidebar: readmeOptions.displaySidebar ? readmeContent : '',
+      content: readmeOptions.displayContent ? readmeContent : '',
+    };
 
     storiesOf.add(story.name, componentFunc, {
       notes: story.notes,
-      ...storyOptions
+      ...storyOptions,
+      readme: {
+        ...readmeConfiguration
+      },
     });
   });
 }
