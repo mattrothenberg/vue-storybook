@@ -5,7 +5,14 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories({req, fileName, sbInstance, plugins, decorators, storyOptions}) {
+export default function registerStories({
+  req,
+  fileName,
+  storiesOf,
+  plugins,
+  decorators,
+  storyOptions
+}) {
   const {
     action,
     withKnobs,
@@ -29,23 +36,24 @@ export default function registerStories({req, fileName, sbInstance, plugins, dec
     componentConfig.__stories || componentConfig.default.__stories;
   if (!stories) return;
   stories.forEach(story => {
-    const storiesOf = sbInstance(story.group || "vue-storybook", module);
+    const storiesOfInstance = storiesOf(story.group || "vue-storybook", module);
     const componentFunc = () => {
-      let data = story.knobs ?
-        parseKnobsObject(story.knobs, {
+      let data = story.knobs
+        ? parseKnobsObject(story.knobs, {
             text,
-          boolean,
-          number,
+            boolean,
+            number,
             select,
-          color,
-          radios,
-          date,
-          files,
-          object,
-          array,
-          optionsKnob,
-          button
-        }) : {};
+            color,
+            radios,
+            date,
+            files,
+            object,
+            array,
+            optionsKnob,
+            button
+          })
+        : {};
       return {
         components: {
           [componentName]: componentConfig.default || componentConfig
@@ -59,9 +67,9 @@ export default function registerStories({req, fileName, sbInstance, plugins, dec
         }
       };
     };
-    if(decorators){
-    decorators.forEach((decor) => {
-      storiesOf.addDecorator(decor);
+    if (decorators) {
+      decorators.forEach(decor => {
+        storiesOfInstance.addDecorator(decor);
       });
     }
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
@@ -73,12 +81,10 @@ export default function registerStories({req, fileName, sbInstance, plugins, dec
       content: readmeOptions.displayContent ? readmeContent : '',
     };
 
-    storiesOf.add(story.name, componentFunc, {
+    storiesOfInstance.add(story.name, componentFunc, {
       notes: story.notes,
       ...storyOptions,
-      readme: {
-        ...readmeConfiguration
-      },
+      readme: readmeConfiguration
     });
   });
 }

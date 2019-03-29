@@ -15,9 +15,9 @@ function camelCase(str) {
 }
 
 function parseKnobsObject(obj, plugins) {
-  return Function(`return ({ text, boolean, number, select, color, radios, date, files, object, array, optionsKnob, button }) => (${obj})`)()(
-    plugins
-  );
+  return Function(
+    `return ({ text, boolean, number, select, color, radios, date, files, object, array, optionsKnob, button }) => (${obj})`
+  )()(plugins);
 }
 
 function getComponentNameFromFilename(fileName) {
