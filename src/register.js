@@ -5,7 +5,14 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories({req, fileName, storiesOf, plugins, decorators, storyOptions}) {
+export default function registerStories({
+  req,
+  fileName,
+  storiesOf,
+  plugins,
+  decorators,
+  storyOptions
+}) {
   const {
     action,
     withKnobs,
@@ -31,21 +38,22 @@ export default function registerStories({req, fileName, storiesOf, plugins, deco
   stories.forEach(story => {
     const storiesOfInstance = storiesOf(story.group || "vue-storybook", module);
     const componentFunc = () => {
-      let data = story.knobs ?
-        parseKnobsObject(story.knobs, {
+      let data = story.knobs
+        ? parseKnobsObject(story.knobs, {
             text,
-          boolean,
-          number,
+            boolean,
+            number,
             select,
-          color,
-          radios,
-          date,
-          files,
-          object,
-          array,
-          optionsKnob,
-          button
-        }) : {};
+            color,
+            radios,
+            date,
+            files,
+            object,
+            array,
+            optionsKnob,
+            button
+          })
+        : {};
       return {
         components: {
           [componentName]: componentConfig.default || componentConfig
@@ -59,13 +67,12 @@ export default function registerStories({req, fileName, storiesOf, plugins, deco
         }
       };
     };
-    if(decorators){
-    decorators.forEach((decor) => {
+    if (decorators) {
+      decorators.forEach(decor => {
         storiesOfInstance.addDecorator(decor);
       });
     }
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
-
 
     storiesOfInstance.add(story.name, componentFunc, {
       notes: story.notes,
