@@ -5,8 +5,23 @@ import {
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories(req, fileName, sbInstance, plugins) {
-  const { action, withKnobs, text, color, select, boolean } = plugins;
+export default function registerStories({req, fileName, storiesOf, plugins, decorators, storyOptions}) {
+  const {
+    action,
+    withKnobs,
+    text,
+    boolean,
+    number,
+    select,
+    color,
+    radios,
+    date,
+    files,
+    object,
+    array,
+    optionsKnob,
+    button
+  } = plugins;
   const componentConfig = req(fileName);
   const componentName = getComponentNameFromFilename(fileName);
 
@@ -14,16 +29,23 @@ export default function registerStories(req, fileName, sbInstance, plugins) {
     componentConfig.__stories || componentConfig.default.__stories;
   if (!stories) return;
   stories.forEach(story => {
-    const storiesOf = sbInstance(story.group || "vue-storybook", module);
+    const storiesOfInstance = storiesOf(story.group || "vue-storybook", module);
     const componentFunc = () => {
-      let data = story.knobs
-        ? parseKnobsObject(story.knobs, {
-            boolean,
+      let data = story.knobs ?
+        parseKnobsObject(story.knobs, {
             text,
+          boolean,
+          number,
             select,
-            color
-          })
-        : {};
+          color,
+          radios,
+          date,
+          files,
+          object,
+          array,
+          optionsKnob,
+          button
+        }) : {};
       return {
         components: {
           [componentName]: componentConfig.default || componentConfig
@@ -37,11 +59,17 @@ export default function registerStories(req, fileName, sbInstance, plugins) {
         }
       };
     };
-
+    if(decorators){
+    decorators.forEach((decor) => {
+        storiesOfInstance.addDecorator(decor);
+      });
+    }
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
-    storiesOf.add(story.name, componentFunc, {
-      notes: story.notes
+
+    storiesOfInstance.add(story.name, componentFunc, {
+      notes: story.notes,
+      ...storyOptions
     });
   });
 }
