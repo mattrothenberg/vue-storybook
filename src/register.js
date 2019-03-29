@@ -75,10 +75,12 @@ export default function registerStories({
     story.knobs ? storiesOf.addDecorator(withKnobs) : false;
 
     var readmeOptions = storyOptions.readme;
-    var readmeContent = readmeOptions.singleFileComponentBlockEnabled ? componentConfig.default.__docs : componentConfig.default.readme;
+    var readmeContent = readmeOptions.singleFileComponentBlockEnabled
+      ? componentConfig.default.__docs
+      : componentConfig.default.readme;
     var readmeConfiguration = {
-      sidebar: readmeOptions.displaySidebar ? readmeContent : '',
-      content: readmeOptions.displayContent ? readmeContent : '',
+      sidebar: readmeOptions.displaySidebar ? readmeContent : "",
+      content: readmeOptions.displayContent ? readmeContent : ""
     };
 
     storiesOfInstance.add(story.name, componentFunc, {
