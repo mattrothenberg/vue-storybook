@@ -20,6 +20,10 @@ function parseKnobsObject(obj, plugins) {
   )()(plugins);
 }
 
+function looseJsonParse(obj) {
+  return Function('"use strict";return (' + obj + ")")();
+}
+
 function getComponentNameFromFilename(fileName) {
   return upperFirst(
     camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
@@ -30,5 +34,6 @@ export {
   camelCase,
   upperFirst,
   parseKnobsObject,
-  getComponentNameFromFilename
+  getComponentNameFromFilename,
+  looseJsonParse
 };

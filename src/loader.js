@@ -10,7 +10,8 @@ function generateCode(source, ctx) {
     group: query.group,
     methods: query.methods,
     notes: query.notes,
-    knobs: query.knobs
+    knobs: query.knobs,
+    options: query.options
   };
 
   code += `function (Component) {

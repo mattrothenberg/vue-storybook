@@ -2,91 +2,62 @@ import {
   upperFirst,
   camelCase,
   parseKnobsObject,
+  looseJsonParse,
   getComponentNameFromFilename
 } from "./util";
 
-export default function registerStories({
+const initialConfig = {
+  knobs: {},
+  decorators: [],
+  methods: {}
+};
+
+function buildStory({ story, component, name, storiesOf }, config) {
+  const { methods, knobs, decorators } = config;
+  const storiesOfInstance = storiesOf(story.group || "vue-storybook", module);
+  const componentFunc = () => {
+    let data = story.knobs ? parseKnobsObject(story.knobs, knobs) : {};
+    return {
+      components: {
+        [name]: component.default || component
+      },
+      props: data,
+      template: story.template,
+      methods: {
+        action(name, ...payload) {
+          if (methods.action) {
+            methods.action(name)(...payload);
+          } else {
+            console.warn("You forgot to add the action method!");
+          }
+        }
+      }
+    };
+  };
+
+  if (decorators) {
+    decorators.forEach(storiesOfInstance.addDecorator);
+  }
+
+  storiesOfInstance.add(story.name, componentFunc, {
+    notes: story.notes,
+    ...(story.options ? { options: looseJsonParse(story.options) } : null)
+  });
+}
+
+export default function registerStories(
   req,
   fileName,
   storiesOf,
-  plugins,
-  decorators,
-  storyOptions
-}) {
-  const {
-    action,
-    withKnobs,
-    text,
-    boolean,
-    number,
-    select,
-    color,
-    radios,
-    date,
-    files,
-    object,
-    array,
-    optionsKnob,
-    button
-  } = plugins;
-  const componentConfig = req(fileName);
-  const componentName = getComponentNameFromFilename(fileName);
+  config = initialConfig
+) {
+  const component = req(fileName);
+  const name = getComponentNameFromFilename(fileName);
 
-  const stories =
-    componentConfig.__stories || componentConfig.default.__stories;
+  const stories = component.__stories || component.default.__stories;
+
   if (!stories) return;
-  stories.forEach(story => {
-    const storiesOfInstance = storiesOf(story.group || "vue-storybook", module);
-    const componentFunc = () => {
-      let data = story.knobs
-        ? parseKnobsObject(story.knobs, {
-            text,
-            boolean,
-            number,
-            select,
-            color,
-            radios,
-            date,
-            files,
-            object,
-            array,
-            optionsKnob,
-            button
-          })
-        : {};
-      return {
-        components: {
-          [componentName]: componentConfig.default || componentConfig
-        },
-        props: data,
-        template: story.template,
-        methods: {
-          action(name, ...payload) {
-            action(name)(...payload);
-          }
-        }
-      };
-    };
-    if (decorators) {
-      decorators.forEach(decor => {
-        storiesOfInstance.addDecorator(decor);
-      });
-    }
-    story.knobs ? storiesOf.addDecorator(withKnobs) : false;
-
-    var readmeOptions = storyOptions.readme;
-    var readmeContent = readmeOptions.singleFileComponentBlockEnabled
-      ? componentConfig.default.__docs
-      : componentConfig.default.readme;
-    var readmeConfiguration = {
-      sidebar: readmeOptions.displaySidebar ? readmeContent : "",
-      content: readmeOptions.displayContent ? readmeContent : ""
-    };
-
-    storiesOfInstance.add(story.name, componentFunc, {
-      notes: story.notes,
-      ...storyOptions,
-      readme: readmeConfiguration
-    });
-  });
+  stories.forEach(story =>
+    buildStory({ story, name, component, storiesOf }, config)
+  );
 }
