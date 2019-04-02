@@ -143,7 +143,7 @@ function loadStories() {
 }
 
 // Let's go!
-loadStories();
+configure(loadStories, module)
 ```
 
 ## Roadmap
