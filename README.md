@@ -1,3 +1,11 @@
+# New Version!
+Heads up, a new version of this plugin – compatible with Vue CLI 3 + [`vue-cli-plugin-storybook`](https://github.com/storybooks/vue-cli-plugin-storybook) – is available for testing.
+
+Take it for a spin and give me your feedback!
+https://github.com/mattrothenberg/vue-storybook/tree/v2
+
+
+
 # vue-storybook
 
 Custom `<story>` blocks for Vue single file components
