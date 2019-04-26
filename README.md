@@ -26,7 +26,7 @@ A **Webpack loader** + **helper script** that allows you to embellish your pre-e
 
 ### Hello World Example
 
-Repo: https://github.com/mattrothenberg/vue-storybook-example
+Repo: https://github.com/mattrothenberg/vue-storybook-example-project
 
 ```vue
 <story name="Disabled Button">
@@ -40,49 +40,83 @@ turns into:
 
 ## How does it work?
 
-Given an existing Vue storybook project, add or modify Storybook's `webpack.config.js` by importing and adding our loader.
+Given an existing Vue CLI + `vue-cli-plugin-storybook` project, modify your project's `vue.config.js` thusly.
 
 ```js
-const { storyLoader } = require("vue-storybook"); // Import!
-module.exports = (storybookBaseConfig, configType) => {
-  storybookBaseConfig.module.rules[1].options = {
-    loaders: {
-      story: storyLoader // Add!
-    }
-  };
-  return storybookBaseConfig;
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.resolve.symlinks(false);
+  },
+  configureWebpack: config => {
+    config.module.rules.push({
+      resourceQuery: /blockType=story/,
+      loader: "vue-storybook"
+    });
+  }
 };
 ```
 
-Add a custom `<story>` block to your single file component. The following Storybook plugins are supported:
+Add a custom `<story>` block to your single file component. The following Storybook plugins/APIs are supported:
 
-* Actions
-* Notes
-* Knobs
+- Actions
+- Story Options
+- Notes
+- Knobs
 
-You can optionally group components by specifiying a `group` attribute. **NB**: For reasons I still don't understand, the `group` attribute _must_ come before the `name` attribute.
+You can optionally group components by specifiying a `group` attribute.
 
 ```vue
-  <story
-    group="Buttons!"
-    name="Dynamic Button"
-    methods="{handleClick: action('click')}"
-    notes="This is cool"
-    knobs="{buttonText: text('Button text', 'initial value')}">
-      <my-button @click="handleClick">
-        {{ buttonText }}
-      </my-button>
-  </story>
+<story
+  options="{
+    panelPosition: 'right'
+  }"
+  name="with knobs"
+  group="MyButton"
+  notes="### this is the coolest story ever"
+  knobs="{
+    initialText: {
+      default: text('Initial Text', 'default value goes here')
+    },
+    isDisabled: {
+      default: boolean('Is Disabled?', false)
+    }
+  }"
+>
+  <my-button :disabled="isDisabled" @click="action('show me the money', isDisabled)">{{initialText}}</my-button>
+</story>
 ```
 
-Then, in your main `index.stories.js` (or wherever your write your stories), leverage our helper script to start adding stories
+Then, in your main `index.stories.js` (or wherever your write your stories), leverage our helper script to start adding stories. NB: the signature of `registerStories` has changed significantly.
+
+```js
+registerStories(req, filename, storiesOf, config);
+```
+
+`config` is now an object with the following keys,
+
+```js
+{
+  knobs: {
+    // put the knobs you plan on using
+    // (things like `text` or `select`)
+    // in this object
+  },
+  decorators: [
+    // an array of decorator functions
+  ],
+  methods: {
+    action // where action is the exported member from `addon-actions`
+  }
+}
+```
 
 ```js
 // Import Storybook + all 'yr plugins!
 import { storiesOf } from "@storybook/vue";
 import { action } from "@storybook/addon-actions";
 import { withNotes } from "@storybook/addon-notes";
-import { withKnobs, text, color, select } from "@storybook/addon-knobs/vue";
+import { withKnobs, text, boolean } from "@storybook/addon-knobs/vue";
 
 // Import our helper
 import { registerStories } from "vue-storybook";
@@ -93,22 +127,37 @@ const req = require.context("./", true, /\.vue$/);
 // Programatically register these stories
 function loadStories() {
   req.keys().forEach(filename => {
-    // The last argument here is an object containing ALL of the plugins you've used in your SFC.
-    registerStories(req, filename, storiesOf, {
-      withKnobs,
-      withNotes,
-      action,
-      text
-    });
+    let config = {
+      knobs: {
+        text,
+        boolean
+      },
+      decorators: [
+        withKnobs,
+        function(context, story) {
+          return {
+            template: `
+              <div><story /></div>`
+          };
+        }
+      ],
+      methods: {
+        action
+      }
+    };
+
+    registerStories(req, filename, storiesOf, config);
   });
 }
 
 // Let's go!
-loadStories();
+configure(loadStories, module)
 ```
 
 ## Roadmap
 
-* [x] Actions
-* [x] Knobs
-* [x] Notes
+- [x] Actions
+- [x] Knobs
+- [x] Notes
+- [ ] Info
+- [ ] Readme
