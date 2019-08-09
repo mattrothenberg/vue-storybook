@@ -41,7 +41,8 @@ function buildStory({ story, component, name, storiesOf }, config) {
 
   storiesOfInstance.add(story.name, componentFunc, {
     notes: story.notes,
-    ...(story.options ? { options: looseJsonParse(story.options) } : null)
+    ...(story.options ? { options: looseJsonParse(story.options) } : null),
+    ...(story.parameters ? looseJsonParse(story.parameters) : null)
   });
 }
 
