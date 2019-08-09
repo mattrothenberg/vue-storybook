@@ -11,7 +11,8 @@ function generateCode(source, ctx) {
     methods: query.methods,
     notes: query.notes,
     knobs: query.knobs,
-    options: query.options
+    options: query.options,
+    parameters: query.parameters
   };
 
   code += `function (Component) {
