@@ -56,6 +56,8 @@ Add a custom `<story>` block to your single file component. The following Storyb
 - Notes
 - Knobs
 
+It is also possible to pass options for other addons using the `parameters` attribute.
+
 You can optionally group components by specifiying a `group` attribute.
 
 ```vue
@@ -73,6 +75,9 @@ You can optionally group components by specifiying a `group` attribute.
     isDisabled: {
       default: boolean('Is Disabled?', false)
     }
+  }"
+  parameters="{
+    foo: { ... }
   }"
 >
   <my-button :disabled="isDisabled" @click="action('show me the money', isDisabled)">{{initialText}}</my-button>
