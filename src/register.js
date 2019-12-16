@@ -55,7 +55,10 @@ export default function registerStories(
   const component = req(fileName);
   const name = getComponentNameFromFilename(fileName);
 
-  const stories = component.__stories || component.default.__stories;
+  const stories =
+    component.__stories ||
+    component.default.__stories ||
+    (component.default.options || {}).__stories;
 
   if (!stories) return;
   stories.forEach(story =>
