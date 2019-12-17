@@ -26,7 +26,7 @@ function looseJsonParse(obj) {
 
 function getComponentNameFromFilename(fileName) {
   return upperFirst(
-    camelCase(fileName.replace(/^\.\/[\W_]*?/, "").replace(/\.\w+$/, ""))
+    camelCase(fileName.replace(/^.+\/[\W_]*?/, "").replace(/\.\w+$/, ""))
   );
 }
 
